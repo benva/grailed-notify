@@ -1,6 +1,6 @@
 # Grailed Notify
 
-A simple Python script that logs into your Grailed account and polls the site continuously, notifying you via SMS or e-mail of any notable deals.
+A simple Python script that logs into your Grailed account and polls the site continuously, notifying you via SMS or e-mail of any notable deals meeting your designer, category, and sizing specifications.
 
 ### Installation
 1. Clone the repository
