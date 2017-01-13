@@ -11,6 +11,10 @@ A simple Python script that logs into your Grailed account and polls the site co
 
 `cd grailed-notify`
 
-3. Install the dependencies
+3. Install `pip` (if necessary)
+
+`sudo easy_install pip`
+
+4. Install the dependencies
 
 `sudo pip install -r requirements.txt`
