@@ -23,4 +23,9 @@ sizes =     [["Tops & Outerwear"],
             ["Tailoring"],
             ["Accessories"]]
 
-bot = GrailedNotify(designers, categories, sizes)
+# First value is the minimum price (set to 0 for no minimum), second is maximum price
+# prices = [min, max]
+# e.g. [100, 300]
+prices = [100, 300]
+
+bot = GrailedNotify(designers, categories, sizes, prices)
