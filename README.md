@@ -25,8 +25,8 @@ Place this line in your `.bashrc` file, or other respective shell config file
 
 ### 1. Edit the values to your specifications
 
-Open `main.py` and edit the designers, categories, sizes, and prices to match your needs. All values must be valid and on Grailed
+Open `main.py` and edit the `designers`, `categories`, `sizes`, and `prices` lists to match your needs. All values must be valid and on Grailed
 
 ### 2. Run the script
 
-`$ python main.py`
+`python main.py`
