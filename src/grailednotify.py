@@ -8,10 +8,11 @@ class GrailedNotify:
     BASE_URL = "https://grailed.com"
     SLEEP_TIME = 1
 
-    def __init__(self, designers, categories, sizes):
+    def __init__(self, designers, categories, sizes, prices):
         self.designers = designers
         self.categories = categories
         self.sizes = sizes
+        self.prices = prices
 
         self.browser = self.launch()
         self.search()
@@ -35,33 +36,32 @@ class GrailedNotify:
             time.sleep(self.SLEEP_TIME)
             self.browser.find_elements_by_css_selector("div.indicator")[3].click()
 
-        num_categories = []
-
+        # Convert categories to numeric values
+        categories = []
         for category in self.categories:
-            num_categories.append(self.cat_to_num(category.lower()))
+            categories.append(self.cat_to_num(category.lower()))
 
         # Select categories specificed in main program
-        for category in num_categories:
+        for category in categories:
             time.sleep(self.SLEEP_TIME)
             self.browser.find_elements_by_css_selector("span.indicator")[category].click()
 
-        # Works sometimes
-        # for category in sizes:
-        #     if len(category) > 1:
-        #         browser.find_elements_by_xpath("//span[contains(text(), '"+ category[0] +"')]")[0].click()
-        #         for size in category[1:]:
-        #             time.sleep(SLEEP_TIME)
-        #             browser.find_elements_by_xpath("//span[contains(text(), '"+ size +"')]")[0].click()
+        # Select sizes specificed in main program
+        for category in self.sizes:
+            if len(category) > 1:
+                self.browser.find_elements_by_xpath("//span[contains(text(), '" + category[0] + "')]")[0].click()
+                for size in category[1:]:
+                    time.sleep(self.SLEEP_TIME)
+                    self.browser.find_elements_by_xpath("//span[contains(text(), '" + size + "')]")[0].click()
 
-        # Must have a value, minimum can be set to 0 if want no minimum
-        # price_min = 100
-        # price_max = 300
-        #
-        # time.sleep(SLEEP_TIME)
-        # price = browser.find_elements_by_css_selector("input.price-min")[0]
+        # price_min = self.prices[0]
+        # price_max = self.prices[1]
+
+        # time.sleep(self.SLEEP_TIME)
+        # price = self.browser.find_elements_by_css_selector("input.price-min")[0]
         # price.clear()
         # price.send_keys(price_min)
-        # price = browser.find_elements_by_css_selector("input.price-max")[0]
+        # price = self.browser.find_elements_by_css_selector("input.price-max")[0]
         # price.clear()
         # price.send_keys(price_max)
 
