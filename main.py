@@ -12,14 +12,14 @@ designers = ["Rick Owens",
 # Must be a proper category of Grailed surrounded by quotes and separated by a comma
 # Case does not matter
 # e.g. ["Tops", "Bottoms", "Outerwear", "Footwear", "Tailoring", "Accessories"]
-categories =    ["Bottoms",
+categories =    ["Tops",
                 "Footwear"]
 
 # Place sizes for respective category in quotes, separated by commas
 # Case does matter
 # e.g. ["Bottoms & Pants", "29", "30", "31"]
-sizes =     [["Tops & Outerwear"],
-            ["Bottoms & Pants", "29", "30", "31"],
+sizes =     [["Tops & Outerwear", "L", "XL"],
+            ["Bottoms & Pants"],
             ["Footwear", "10", "10.5", "11"],
             ["Tailoring"],
             ["Accessories"]]
