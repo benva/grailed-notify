@@ -1,8 +1,9 @@
 # Grailed Notify
 
-A simple Python script that logs into your Grailed account and polls the site continuously, notifying you via SMS or e-mail of any notable deals meeting your designer, category, and sizing specifications.
+A simple Python script that notifies you via email on deals on Grailed you would otherwise have missed. Select your favourite designers, along with the categories and sizing you're interested in, with an optional minimum and maximum price.
 
 ## Installation
+
 ### 1. Clone the repository
 
 `git clone https://github.com/benva/grailed-notify.git`
@@ -11,10 +12,11 @@ A simple Python script that logs into your Grailed account and polls the site co
 
 `cd grailed-notify`
 
-### 3. Install `pip` (if necessary)
-
-`sudo easy_install pip`
-
-### 4. Install the dependencies
+### 3. Install the dependencies
 
 `sudo pip install -r requirements.txt`
+
+### 4. Add bin folder to $PATH
+
+Place this line in your `.bashrc` file, or other respective shell config file
+`export PATH=$PATH:/path/to/grailed-notify/bin`
