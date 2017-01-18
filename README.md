@@ -20,3 +20,13 @@ A simple Python script that notifies you via email on deals on Grailed you would
 
 Place this line in your `.bashrc` file, or other respective shell config file
 `export PATH=$PATH:/path/to/grailed-notify/bin`
+
+## Getting Started
+
+### 1. Edit the values to your specifications
+
+Open `main.py` and edit the designers, categories, sizes, and prices to match your needs. All values must be valid and on Grailed
+
+### 2. Run the script
+
+`$ python main.py`
