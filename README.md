@@ -1,6 +1,6 @@
 # Grailed Notify
 
-A simple Python script that notifies you via email on deals on Grailed you would otherwise have missed. Select your favourite designers, along with the categories and sizing you're interested in, with an optional minimum and maximum price.
+A simple Python script that notifies you via email on deals on Grailed you would have otherwise missed. Select your favourite designers, along with the categories and sizing you're interested in, with an optional minimum and maximum price.
 
 ## Installation
 
