@@ -16,9 +16,10 @@ categories =    ["Bottoms",
                 "Footwear"]
 
 # Place sizes for respective category in quotes, separated by commas
+# Case does matter
 # e.g. ["Bottoms & Pants", "29", "30", "31"]
 sizes =     [["Tops & Outerwear"],
-            ["Bottoms & Pants"],
+            ["Bottoms & Pants", "29", "30", "31"],
             ["Footwear", "10", "10.5", "11"],
             ["Tailoring"],
             ["Accessories"]]
