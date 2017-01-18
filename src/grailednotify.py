@@ -37,33 +37,44 @@ class GrailedNotify:
             self.browser.find_elements_by_css_selector("div.indicator")[3].click()
 
         # Convert categories to numeric values
-        categories = []
+        num_categories = []
         for category in self.categories:
-            categories.append(self.cat_to_num(category.lower()))
+            num_categories.append(self.cat_to_num(category.lower()))
 
-        # Select categories specificed in main program
-        for category in categories:
+        # Select categories to display
+        for category in num_categories:
             time.sleep(self.SLEEP_TIME)
             self.browser.find_elements_by_css_selector("span.indicator")[category].click()
 
-        # Select sizes specificed in main program
         for category in self.sizes:
+            time.sleep(self.SLEEP_TIME)
+            # Only open size categories that have more than one element
             if len(category) > 1:
-                self.browser.find_elements_by_xpath("//span[contains(text(), '" + category[0] + "')]")[0].click()
+                # First click of category often fails, but always works on second try
+                try:
+                    self.browser.find_elements_by_xpath("//span[contains(text(), '" + category[0] + "')]")[0].click()
+                except Exception:
+                    print "Error: First click failed, trying again"
+                    self.browser.find_elements_by_xpath("//span[contains(text(), '" + category[0] + "')]")[0].click()
+                # Select sizes
                 for size in category[1:]:
                     time.sleep(self.SLEEP_TIME)
                     self.browser.find_elements_by_xpath("//span[contains(text(), '" + size + "')]")[0].click()
+                # Close the category
+                time.sleep(self.SLEEP_TIME)
+                self.browser.find_elements_by_xpath("//span[contains(text(), '" + category[0] + "')]")[0].click()
 
-        # price_min = self.prices[0]
-        # price_max = self.prices[1]
+        price_min = self.prices[0]
+        price_max = self.prices[1]
 
-        # time.sleep(self.SLEEP_TIME)
-        # price = self.browser.find_elements_by_css_selector("input.price-min")[0]
-        # price.clear()
-        # price.send_keys(price_min)
-        # price = self.browser.find_elements_by_css_selector("input.price-max")[0]
-        # price.clear()
-        # price.send_keys(price_max)
+        # Input the minimum and maximum price
+        time.sleep(self.SLEEP_TIME)
+        price = self.browser.find_elements_by_css_selector("input.price-min")[0]
+        price.clear()
+        price.send_keys(price_min)
+        price = self.browser.find_elements_by_css_selector("input.price-max")[0]
+        price.clear()
+        price.send_keys(price_max)
 
 
     # Converts the category string into an integer
