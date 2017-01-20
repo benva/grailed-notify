@@ -27,16 +27,29 @@ sizes =     [["Tops & Outerwear", "L", "XL"],
             ["Accessories"]]
 
 # First value is the minimum price (set to 0 for no minimum), second is maximum price
-# prices = [min, max]
+# [min, max]
 # e.g. [0, 500]
-prices = [0, 200]
+prices = [100, 200]
 
 # Your email address
+# e.g. "someone@site.com"
 address = "grailed.notify@gmail.com"
 
-bot = GrailedNotify(designers, categories, sizes, prices, address)
+# Your operating system
+# e.g. "linux32"
+# e.g. "linux64"
+# e.g. "mac"
+# e.g. "windows"
+os = "mac"
 
-# try:
-#     bot.main()
-# except KeyboardInterrupt:
-#     print " Exit detected"
+# Time to wait until refreshing the page
+# Must be placed after `os` argument in `bot` call
+# Optional, defaults to 300 seconds (5 minutes)
+# refresh_time = 600
+
+bot = GrailedNotify(designers, categories, sizes, prices, address, os)
+
+try:
+    bot.main()
+except KeyboardInterrupt:
+    print " Exit detected"
