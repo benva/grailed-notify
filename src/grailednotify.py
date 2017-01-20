@@ -1,6 +1,7 @@
 import time
 import yagmail
 from selenium import webdriver
+from selenium.common.exceptions import WebDriverException
 
 class GrailedNotify:
     BASE_URL = "https://grailed.com"
@@ -47,7 +48,7 @@ class GrailedNotify:
         try:
             browser.find_elements_by_css_selector("h1.close")[0].click()
             print "Done"
-        except Exception:
+        except WebDriverException:
             print "ERROR: First time visitor banner not present"
 
         return browser
@@ -129,7 +130,7 @@ class GrailedNotify:
     def click(self, element):
         try:
             element.click()
-        except Exception:
+        except WebDriverException:
             element.click()
 
     # Converts the category string into an integer
