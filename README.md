@@ -16,21 +16,20 @@ A simple Python script that notifies you via email on deals on Grailed you would
 
 `sudo pip install -r requirements.txt`
 
-### 4. Add bin folder to $PATH
-
-Place this line in your `.bashrc` file, or other respective shell config file
-`export PATH=$PATH:/path/to/grailed-notify/bin`
-
 ## Getting Started
 
 ### 1. Edit the values to your specifications
 
-Open `main.py` and edit the `designers`, `categories`, `sizes`, and `prices` lists to match your needs. All values must be valid and on Grailed
+Open `main.py` and edit `designers`, `categories`, `sizes`, `prices`, and `address` to match your needs. All values must be valid and the filters must exist on Grailed.
 
 ### 2. Run the script
 
 `python main.py`
 
-### 3. Wait
+### 3. Enter your e-mail password
+
+`Password for <grailed-notify@gmail.com>:` will show up prompting you for your password. Your password is not saved anywhere, just used to sign in. If you have application-specific passwords set up, you must use that.
+
+### 4. Wait
 
 Alerts of new listings matching your specifications will be emailed to you as long as the script is running, just wait!
