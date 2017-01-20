@@ -5,21 +5,20 @@ from selenium import webdriver
 class GrailedNotify:
     BASE_URL = "https://grailed.com"
     WAIT_TIME = 1
-    REFRESH_TIME = 30
-    # Make this a user choice, minimum of 300
-    # REFRESH_TIME = 600
     SUBJECT = "grailed-notify"
 
-    def __init__(self, designers, categories, sizes, prices, address):
+    def __init__(self, designers, categories, sizes, prices, address, os, refresh_time=300):
         self.designers = designers
         self.categories = categories
         self.sizes = sizes
         self.prices = prices
         self.address = address
+        self.os = os
+        self.refresh_time = refresh_time
 
         print "Welcome to grailed-notify, please be patient as everything is set up"
 
-        # self.email = self.connect()
+        self.email = self.connect()
         self.browser = self.launch()
         self.search_url = self.search()
 
@@ -39,7 +38,8 @@ class GrailedNotify:
     # Launches the webdriver
     def launch(self):
         print "Launching " + self.BASE_URL + "... ",
-        browser = webdriver.Chrome("./bin/chromedriver-mac")
+        binary_file = self.os_to_binary(self.os)
+        browser = webdriver.Chrome("./bin/chromedriver" + binary_file)
         browser.set_window_size(1200, 600)
         browser.get(self.BASE_URL)
 
@@ -51,6 +51,15 @@ class GrailedNotify:
             print "ERROR: First time visitor banner not present"
 
         return browser
+
+    # Converts the os parameter to a binary file
+    def os_to_binary(self, os):
+        return {
+            "linux32": "-linux32",
+            "linux64": "-linux64",
+            "mac": "-mac",
+            "windows": ".exe",
+        }[os]
 
     # Searches Grailed using given filters
     def search(self):
@@ -66,7 +75,6 @@ class GrailedNotify:
 
             xpath = "//div//div//div//div//div//div//div//div//div//div//div//div//div"
             time.sleep(self.WAIT_TIME)
-            # self.browser.find_elements_by_xpath(xpath)[0].click()
             designer_indicator = self.browser.find_elements_by_xpath(xpath)[0]
             self.click(designer_indicator)
 
@@ -78,7 +86,6 @@ class GrailedNotify:
         # Select categories specified
         for category in num_categories:
             time.sleep(self.WAIT_TIME)
-            # self.browser.find_elements_by_css_selector("span.indicator")[category].click()
             category_indicator = self.browser.find_elements_by_css_selector("span.indicator")[category]
             self.click(category_indicator)
 
@@ -86,25 +93,18 @@ class GrailedNotify:
         for category in self.sizes:
             # Only open size categories that have more than one element
             if len(category) > 1:
-                # This click often fails on the first time, but will work the second, safer to wrap in try
                 time.sleep(self.WAIT_TIME)
-                # try:
-                #     self.browser.find_elements_by_xpath("//span[contains(text(), '" + category[0] + "')]")[0].click()
-                # except Exception:
-                #     self.browser.find_elements_by_xpath("//span[contains(text(), '" + category[0] + "')]")[0].click()
                 category_dropdown = self.browser.find_elements_by_xpath("//span[contains(text(), '" + category[0] + "')]")[0]
                 self.click(category_dropdown)
 
                 # Click sizes
                 for size in category[1:]:
                     time.sleep(self.WAIT_TIME)
-                    # self.browser.find_elements_by_xpath("//span[contains(text(), '" + size + "')]")[0].click()
                     size_box = self.browser.find_elements_by_xpath("//span[contains(text(), '" + size + "')]")[0]
                     self.click(size_box)
 
                 # Close the size category
                 time.sleep(self.WAIT_TIME)
-                # self.browser.find_elements_by_xpath("//span[contains(text(), '" + category[0] + "')]")[0].click()
                 self.click(category_dropdown)
 
         price_min = self.prices[0]
@@ -125,7 +125,7 @@ class GrailedNotify:
         return search_url
 
     # Tries to click the given element a first time, clicks again if first doesn't
-    # work, as this solves 99% of errors
+    # work, as this solves 99% of click errors
     def click(self, element):
         try:
             element.click()
@@ -143,8 +143,8 @@ class GrailedNotify:
             "accessories": 5,
         }[category]
 
-
     # Refresh the listings
+    # Perhaps make this hit 'RELOAD' instead, and get new URL
     def refresh(self):
         print "Refrehsing page " + self.search_url + "... ",
         self.browser.get(self.search_url)
@@ -173,12 +173,9 @@ class GrailedNotify:
         # Send the e-mail if it has content
         print "Sending listings to " + self.address + "...",
         if(content != ""):
-            try:
-                content = "These listings met your filters:\n" + content
-                self.email.send(self.address, subject, content)
-                print "Done"
-            except Exception:
-                print "ERROR: Could not send e-mail"
+            content = "These listings met your filters:\n" + content
+            self.email.send(self.address, subject, [content])
+            print "Done"
         else:
             print "ERROR: No new listings to send"
 
@@ -207,4 +204,4 @@ class GrailedNotify:
             self.notify()
             self.populate_duplicates()
             self.del_links()
-            time.sleep(self.REFRESH_TIME)
+            time.sleep(self.refresh_time)
