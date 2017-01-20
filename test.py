@@ -3,7 +3,3 @@ from selenium import webdriver
 browser = webdriver.Chrome()
 browser.set_window_size(1200, 600)
 browser.get("https://grailed.com")
-
-
-# TO DO
-# Make emails not retarded
