@@ -1,79 +1,111 @@
 import time
+import yagmail
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 
 class GrailedNotify:
     BASE_URL = "https://grailed.com"
     WAIT_TIME = 1
     REFRESH_TIME = 30
+    # Make this a user choice, minimum of 300
+    # REFRESH_TIME = 600
+    SUBJECT = "grailed-notify"
 
-    def __init__(self, designers, categories, sizes, prices):
+    def __init__(self, designers, categories, sizes, prices, address):
         self.designers = designers
         self.categories = categories
         self.sizes = sizes
         self.prices = prices
+        self.address = address
 
+        print "Welcome to grailed-notify, please be patient as everything is set up"
+
+        # self.email = self.connect()
         self.browser = self.launch()
-        self.search_url = ""
+        self.search_url = self.search()
+
         self.links = []
         self.duplicates = []
 
     def __del__(self):
         self.browser.close()
 
+    # Connect to e-mail account
+    def connect(self):
+        email = yagmail.SMTP(self.address)
+        print "Connecting to e-mail server... ",
+        print "Done"
+        return email
+
     # Launches the webdriver
     def launch(self):
-        # browser = webdriver.PhantomJS()
-        browser = webdriver.Chrome()
+        print "Launching " + self.BASE_URL + "... ",
+        browser = webdriver.Chrome("./bin/chromedriver-mac")
         browser.set_window_size(1200, 600)
         browser.get(self.BASE_URL)
 
         # Tries to close the first time visitor banner if present
         try:
             browser.find_elements_by_css_selector("h1.close")[0].click()
+            print "Done"
         except Exception:
-            print "Error: First time visitor banner not present"
+            print "ERROR: First time visitor banner not present"
 
         return browser
 
     # Searches Grailed using given filters
     def search(self):
+        print "Searching Grailed with given filters... ",
         time.sleep(self.WAIT_TIME)
-        
-        # Select designers specified in main program
+
+        # Select designers specified
         for designer in self.designers:
             search = self.browser.find_elements_by_css_selector("input.search")[1]
+            time.sleep(self.WAIT_TIME)
             search.clear()
             search.send_keys(designer)
-            # Selects indicator for given designer
+
+            xpath = "//div//div//div//div//div//div//div//div//div//div//div//div//div"
             time.sleep(self.WAIT_TIME)
-            self.browser.find_elements_by_css_selector("div.indicator")[3].click()
+            # self.browser.find_elements_by_xpath(xpath)[0].click()
+            designer_indicator = self.browser.find_elements_by_xpath(xpath)[0]
+            self.click(designer_indicator)
 
         # Convert categories to numeric values
         num_categories = []
         for category in self.categories:
             num_categories.append(self.cat_to_num(category.lower()))
 
+        # Select categories specified
         for category in num_categories:
             time.sleep(self.WAIT_TIME)
-            self.browser.find_elements_by_css_selector("span.indicator")[category].click()
+            # self.browser.find_elements_by_css_selector("span.indicator")[category].click()
+            category_indicator = self.browser.find_elements_by_css_selector("span.indicator")[category]
+            self.click(category_indicator)
 
+        # Select sizes specified
         for category in self.sizes:
             # Only open size categories that have more than one element
             if len(category) > 1:
-                # First click of category often fails, but always works on second try
-                try:
-                    self.browser.find_elements_by_xpath("//span[contains(text(), '" + category[0] + "')]")[0].click()
-                except Exception:
-                    print "Error: First click failed, trying again"
-                    self.browser.find_elements_by_xpath("//span[contains(text(), '" + category[0] + "')]")[0].click()
-                # Select sizes
+                # This click often fails on the first time, but will work the second, safer to wrap in try
+                time.sleep(self.WAIT_TIME)
+                # try:
+                #     self.browser.find_elements_by_xpath("//span[contains(text(), '" + category[0] + "')]")[0].click()
+                # except Exception:
+                #     self.browser.find_elements_by_xpath("//span[contains(text(), '" + category[0] + "')]")[0].click()
+                category_dropdown = self.browser.find_elements_by_xpath("//span[contains(text(), '" + category[0] + "')]")[0]
+                self.click(category_dropdown)
+
+                # Click sizes
                 for size in category[1:]:
                     time.sleep(self.WAIT_TIME)
-                    self.browser.find_elements_by_xpath("//span[contains(text(), '" + size + "')]")[0].click()
-                # Close the category
+                    # self.browser.find_elements_by_xpath("//span[contains(text(), '" + size + "')]")[0].click()
+                    size_box = self.browser.find_elements_by_xpath("//span[contains(text(), '" + size + "')]")[0]
+                    self.click(size_box)
+
+                # Close the size category
                 time.sleep(self.WAIT_TIME)
-                self.browser.find_elements_by_xpath("//span[contains(text(), '" + category[0] + "')]")[0].click()
+                # self.browser.find_elements_by_xpath("//span[contains(text(), '" + category[0] + "')]")[0].click()
+                self.click(category_dropdown)
 
         price_min = self.prices[0]
         price_max = self.prices[1]
@@ -87,8 +119,18 @@ class GrailedNotify:
         price.clear()
         price.send_keys(price_max)
 
+        print "Done"
         time.sleep(self.WAIT_TIME)
-        self.search_url = self.browser.current_url
+        search_url = self.browser.current_url
+        return search_url
+
+    # Tries to click the given element a first time, clicks again if first doesn't
+    # work, as this solves 99% of errors
+    def click(self, element):
+        try:
+            element.click()
+        except Exception:
+            element.click()
 
     # Converts the category string into an integer
     def cat_to_num(self, category):
@@ -101,6 +143,13 @@ class GrailedNotify:
             "accessories": 5,
         }[category]
 
+
+    # Refresh the listings
+    def refresh(self):
+        print "Refrehsing page " + self.search_url + "... ",
+        self.browser.get(self.search_url)
+        print "Done"
+
     # Retrieves links for all listings
     def scrape(self):
         time.sleep(self.WAIT_TIME)
@@ -110,6 +159,34 @@ class GrailedNotify:
 
         for i in range(num_listings):
             self.links.append(listings[i].get_attribute("href"))
+
+    # Notifies user with new link if not a duplicate
+    def notify(self):
+        subject = self.SUBJECT + " " + time.strftime("%d/%m/%Y") + " " + time.strftime("%I:%M:%S")
+        content = ""
+
+        # Create body of e-mail
+        for link in self.links:
+            if self.duplicate(link) != True:
+                content += link + "\n"
+
+        # Send the e-mail if it has content
+        print "Sending listings to " + self.address + "...",
+        if(content != ""):
+            try:
+                content = "These listings met your filters:\n" + content
+                self.email.send(self.address, subject, content)
+                print "Done"
+            except Exception:
+                print "ERROR: Could not send e-mail"
+        else:
+            print "ERROR: No new listings to send"
+
+    # Check if the link is a duplicate
+    def duplicate(self, link):
+        if self.duplicates.count(link) == 0:
+            return False
+        return True
 
     # Populate the duplicates list for later use
     def populate_duplicates(self):
@@ -121,25 +198,8 @@ class GrailedNotify:
     def del_links(self):
         del self.links[:]
 
-    # Notifies user with new link if not a duplicate
-    def notify(self):
-        for link in self.links:
-            if self.duplicate(link) != True:
-                print link
-
-    # Check if the link is a duplicate
-    def duplicate(self, link):
-        if self.duplicates.count(link) == 0:
-            return False
-        return True
-
-    # Refresh the listings
-    def refresh(self):
-        self.browser.get(self.search_url)
-
     # Main loop
-    def loop(self):
-        self.search()
+    def main(self):
         while True:
             # Must reload before scraping due to bug on Grailed creating duplicate listings
             self.refresh()
