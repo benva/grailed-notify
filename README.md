@@ -24,7 +24,7 @@ Change the line `browser = webdriver.Chrome("./bin/chromedriver-mac")` in `grail
 
 ### 1. Edit the values to your specifications
 
-Open `main.py` and edit `designers`, `categories`, `sizes`, `prices`, and `address` to match your needs. All values must be valid and the filters must exist on Grailed.
+Open `main.py` and edit `designers`, `categories`, `sizes`, `prices`, `address`, and `os` to match your needs. All values must be valid and the filters must exist on Grailed.
 
 ### 2. Run the script
 
@@ -32,7 +32,7 @@ Open `main.py` and edit `designers`, `categories`, `sizes`, `prices`, and `addre
 
 ### 3. Enter your e-mail password
 
-`Password for <grailed-notify@gmail.com>:` will show up prompting you for your password. Your password is not saved anywhere, just used to sign in. If you have application-specific passwords set up, you must use that.
+`Password for <someone@site.com>:` will show up in the terminal prompting you for your password. Your password is not saved anywhere, just used to sign in. If you have application-specific passwords set up, you must use that.
 
 ### 4. Wait
 
@@ -41,3 +41,17 @@ Alerts of new listings matching your specifications will be emailed to you as lo
 ### 5. Ending the script
 
 Make sure you are in the terminal and hit `Ctrl+C` to terminate the script.
+
+## To-do
+
+### Robustness
+
+In general, could use a bit more robustness.
+
+### E-mail preview
+
+When sending emails, give a preview (designer, picture, item name, price) with the link.
+
+### HTML Front-end
+
+Implement a HTML page with all the filters that would replace `main.py`.
