@@ -30,3 +30,7 @@ Open `main.py` and edit the `designers`, `categories`, `sizes`, and `prices` lis
 ### 2. Run the script
 
 `python main.py`
+
+### 3. Wait
+
+Alerts of new listings matching your specifications will be emailed to you as long as the script is running, just wait!
