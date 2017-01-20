@@ -29,10 +29,14 @@ sizes =     [["Tops & Outerwear", "L", "XL"],
 # First value is the minimum price (set to 0 for no minimum), second is maximum price
 # prices = [min, max]
 # e.g. [0, 500]
-prices = [100, 200]
+prices = [0, 200]
 
-# Your email
-email = "benjamin.asals@gmail.com"
+# Your email address
+address = "grailed.notify@gmail.com"
 
-bot = GrailedNotify(designers, categories, sizes, prices, email)
-bot.loop()
+bot = GrailedNotify(designers, categories, sizes, prices, address)
+
+# try:
+#     bot.main()
+# except KeyboardInterrupt:
+#     print " Exit detected"
