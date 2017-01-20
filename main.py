@@ -4,20 +4,22 @@ sys.path.append(os.path.join(sys.path[0],'src'))
 from grailednotify import GrailedNotify
 
 # Proper, full names surrounded by quotes and separated by a comma
-# e.g. ["Rick Owens", "Raf Simons", "Julius"]
+# Must be a designer on Grailed
+# e.g. ["Rick Owens", "Raf Simons"]
 designers = ["Rick Owens",
-            "Raf Simons",
             "Julius"]
 
 # Must be a proper category of Grailed surrounded by quotes and separated by a comma
-# Case does not matter
+# Must be a filter on Grailed, case does not matter
 # e.g. ["Tops", "Bottoms", "Outerwear", "Footwear", "Tailoring", "Accessories"]
-categories =    ["Tops",
+categories =    ["Outerwear",
                 "Footwear"]
 
 # Place sizes for respective category in quotes, separated by commas
-# Case does matter
+# Must be a filter on Grailed, case does matter
+# e.g. ["Tops & Outerwear", "XS", "S", "M"]
 # e.g. ["Bottoms & Pants", "29", "30", "31"]
+# e.g. ["Footwear", "11.5", "12"]
 sizes =     [["Tops & Outerwear", "L", "XL"],
             ["Bottoms & Pants"],
             ["Footwear", "10", "10.5", "11"],
@@ -26,7 +28,11 @@ sizes =     [["Tops & Outerwear", "L", "XL"],
 
 # First value is the minimum price (set to 0 for no minimum), second is maximum price
 # prices = [min, max]
-# e.g. [100, 300]
-prices = [100, 300]
+# e.g. [0, 500]
+prices = [100, 200]
 
-bot = GrailedNotify(designers, categories, sizes, prices)
+# Your email
+email = "benjamin.asals@gmail.com"
+
+bot = GrailedNotify(designers, categories, sizes, prices, email)
+bot.loop()
