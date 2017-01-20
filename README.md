@@ -1,6 +1,6 @@
 # Grailed Notify
 
-A simple Python script that notifies you via email on deals on Grailed you would have otherwise missed. Select your favourite designers, along with the categories and sizing you're interested in, with an optional minimum and maximum price.
+A simple Python script that notifies you via email on deals on Grailed you would have otherwise missed. Select your favourite designers, along with the categories and sizing you're interested in, with a minimum and maximum price.
 
 ## Installation
 
@@ -18,8 +18,7 @@ A simple Python script that notifies you via email on deals on Grailed you would
 
 ### 4. Tailor to your OS
 
-Change the line `browser = webdriver.Chrome("./bin/chromedriver-mac")` in `grailednotify.py` to `"./bin/chromedriver-linux32"`, `"./bin/chromedriver-linux64"`, or `"./bin/chromedriver.exe"`
-
+Change the line `browser = webdriver.Chrome("./bin/chromedriver-mac")` in `grailednotify.py` to `"./bin/chromedriver-linux32"`, `"./bin/chromedriver-linux64"`, or `"./bin/chromedriver.exe"` depending on your OS.
 
 ## Getting Started
 
@@ -38,3 +37,7 @@ Open `main.py` and edit `designers`, `categories`, `sizes`, `prices`, and `addre
 ### 4. Wait
 
 Alerts of new listings matching your specifications will be emailed to you as long as the script is running, just wait!
+
+### 5. Ending the script
+
+Make sure you are in the terminal and hit `Ctrl+C` to terminate the script.
