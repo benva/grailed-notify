@@ -30,15 +30,11 @@ Open `main.py` and edit `designers`, `categories`, `sizes`, `prices`, `address`,
 
 `python main.py`
 
-### 3. Enter your e-mail password
-
-`Password for <someone@site.com>:` will show up in the terminal prompting you for your password. Your password is not saved anywhere, just used to sign in. If you have application-specific passwords set up, you must use that.
-
-### 4. Wait
+### 3. Wait
 
 Alerts of new listings matching your specifications will be emailed to you as long as the script is running, just wait!
 
-### 5. Ending the script
+### 4. Ending the script
 
 Make sure you are in the terminal and hit `Ctrl+C` to terminate the script.
 
