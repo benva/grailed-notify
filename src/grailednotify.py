@@ -7,6 +7,8 @@ class GrailedNotify:
     BASE_URL = "https://grailed.com"
     WAIT_TIME = 1
     SUBJECT = "grailed-notify"
+    LOGIN = "grailed.notify@gmail.com"
+    PWD = "aykxofzbyhqhbybw"
 
     def __init__(self, designers, categories, sizes, prices, address, os, refresh_time=300):
         self.designers = designers
@@ -31,7 +33,7 @@ class GrailedNotify:
 
     # Connect to e-mail account
     def connect(self):
-        email = yagmail.SMTP(self.address)
+        email = yagmail.SMTP(self.LOGIN, self.PWD)
         print "Connecting to e-mail server... ",
         print "Done"
         return email
