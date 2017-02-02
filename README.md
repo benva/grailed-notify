@@ -16,10 +16,6 @@ A simple Python script that notifies you via email on deals on Grailed you would
 
 `sudo pip install -r requirements.txt`
 
-### 4. Tailor to your OS
-
-Change the line `browser = webdriver.Chrome("./bin/chromedriver-mac")` in `grailednotify.py` to `"./bin/chromedriver-linux32"`, `"./bin/chromedriver-linux64"`, or `"./bin/chromedriver.exe"` depending on your OS.
-
 ## Getting Started
 
 ### 1. Edit the values to your specifications
