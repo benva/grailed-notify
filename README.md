@@ -4,7 +4,7 @@ A simple Python script that notifies you via email on deals on Grailed you would
 
 ## Demonstration
 
-### Here is a demonstration with the following filters:
+### Here is a demonstration of the script:
 
 ![](https://github.com/benva/grailed-notify/raw/master/demo.gif)
 
