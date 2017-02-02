@@ -6,20 +6,6 @@ A simple Python script that notifies you via email on deals on Grailed you would
 
 ### Here is a demonstration with the following filters:
 
-`designers = ["Rick Owens", "Julius"]`
-
-`categories =    ["Outerwear, "Footwear"]`
-
-`sizes =     [["Tops & Outerwear", "L", "XL"],
-            ["Bottoms & Pants"],
-            ["Footwear", "10", "10.5", "11"],
-            ["Tailoring"],
-            ["Accessories"]]`
-
-`prices = [100, 200]`
-
-`address = "grailed.notify@gmail.com"`
-
 ![](https://github.com/benva/grailed-notify/raw/master/demo.gif)
 
 ## Installation
