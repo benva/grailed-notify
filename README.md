@@ -34,17 +34,3 @@ Alerts of new listings matching your specifications will be emailed to you as lo
 ### 4. Ending the script
 
 Make sure you are in the terminal and hit `Ctrl+C` to terminate the script.
-
-## To-do
-
-### Robustness
-
-In general, could use a bit more robustness.
-
-### E-mail preview
-
-When sending emails, give a preview (designer, picture, item name, price) with the link.
-
-### HTML Front-end
-
-Implement a HTML page with all the filters that would replace `main.py`.
