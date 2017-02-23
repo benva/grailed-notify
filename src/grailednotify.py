@@ -1,5 +1,6 @@
 import time
 import yagmail
+from sys import platform as _platform
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 
@@ -10,13 +11,12 @@ class GrailedNotify:
     LOGIN = "grailed.notify@gmail.com"
     PWD = "aykxofzbyhqhbybw"
 
-    def __init__(self, designers, categories, sizes, prices, address, os, refresh_time=300):
+    def __init__(self, designers, categories, sizes, prices, address, refresh_time=300):
         self.designers = designers
         self.categories = categories
         self.sizes = sizes
         self.prices = prices
         self.address = address
-        self.os = os
         self.refresh_time = refresh_time
 
         print "Welcome to grailed-notify, please be patient as everything is set up"
@@ -41,7 +41,14 @@ class GrailedNotify:
     # Launches the webdriver
     def launch(self):
         print "Launching " + self.BASE_URL + "... ",
-        binary_file = self.os_to_binary(self.os)
+
+        if _platform == "linux" or _platform == "linux2":
+           binary_file = "-linux"
+        elif _platform == "darwin":
+           binary_file = "-mac"
+        elif _platform == "win32":
+           binary_file = ".exe"
+
         browser = webdriver.Chrome("./bin/chromedriver" + binary_file)
         browser.set_window_size(1200, 600)
         browser.get(self.BASE_URL)
@@ -54,15 +61,6 @@ class GrailedNotify:
             print "ERROR: First time visitor banner not present"
 
         return browser
-
-    # Converts the os parameter to a binary file
-    def os_to_binary(self, os):
-        return {
-            "linux32": "-linux32",
-            "linux64": "-linux64",
-            "mac": "-mac",
-            "windows": ".exe",
-        }[os]
 
     # Searches Grailed using given filters
     def search(self):

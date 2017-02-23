@@ -35,19 +35,12 @@ prices = [100, 200]
 # e.g. "someone@site.com"
 address = "grailed.notify@gmail.com"
 
-# Your operating system
-# e.g. "linux32"
-# e.g. "linux64"
-# e.g. "mac"
-# e.g. "windows"
-os = "mac"
-
 # Time to wait until refreshing the page
 # Must be placed after `os` argument in `bot` call
 # Optional, defaults to 300 seconds (5 minutes)
 # refresh_time = 600
 
-bot = GrailedNotify(designers, categories, sizes, prices, address, os)
+bot = GrailedNotify(designers, categories, sizes, prices, address)
 
 try:
     bot.main()
