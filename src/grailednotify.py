@@ -26,6 +26,13 @@ class GrailedNotify:
         self.browser = self.launch()
         self.search_url = self.search()
 
+        # Creates listings table in database if it does not exist
+        db = sqlite3.connect("./src/Listings.db")
+        c = db.cursor()
+        c.execute("CREATE TABLE IF NOT EXISTS listings (link TEXT PRIMARY KEY, price NUM)")
+        db.commit()
+        db.close()
+
         self.listings = []
         # self.duplicates = []
 
@@ -43,6 +50,7 @@ class GrailedNotify:
     def launch(self):
         print "Launching " + self.BASE_URL + "... ",
 
+        # Decide which binary file to use based on user OS
         if _platform == "linux" or _platform == "linux2":
            binary_file = "-linux"
         elif _platform == "darwin":
@@ -182,15 +190,10 @@ class GrailedNotify:
             print "ERROR: No new listings to send"
 
     # Check if the link is a duplicate
-    # def duplicate(self, link):
-    #     if self.duplicates.count(link) == 0:
-    #         return False
-    #     return True
-
-    # Check if the link is a duplicate
     def duplicate(self, link):
         duplicate_flag = False
-        db = sqlite3.connect("Listings.db")
+
+        db = sqlite3.connect("./src/Listings.db")
         c = db.cursor()
         c.execute("SELECT link FROM listings WHERE link=?", (link,))
         results = c.fetchall()
@@ -199,6 +202,7 @@ class GrailedNotify:
         if not results:
             # CHANGE 0 TO PRICE
             self.insert_listing(link, 0)
+        # If listings is a duplicate, check if priced has decreased
         else:
             duplicate_flag = True
 
@@ -206,14 +210,8 @@ class GrailedNotify:
         db.close()
         return duplicate_flag
 
-    # Populate the duplicates list for later use
-    # def populate_duplicates(self):
-    #     for link in self.listings:
-    #         if self.duplicate(link) != True:
-    #             self.duplicates.append(link)
-
     def insert_listing(self, link, price):
-        db = sqlite3.connect("Listings.db")
+        db = sqlite3.connect("./src/Listings.db")
         c = db.cursor()
         c.execute("INSERT INTO listings VALUES (?, ?)", (link, price))
         db.commit()
@@ -233,4 +231,5 @@ class GrailedNotify:
             self.notify()
             # self.populate_duplicates()
             self.del_links()
+            print "Sleeping for " + `self.refresh_time` + " seconds..."
             time.sleep(self.refresh_time)
