@@ -1,3 +1,4 @@
+import sqlite3
 import time
 import yagmail
 from sys import platform as _platform
@@ -25,8 +26,8 @@ class GrailedNotify:
         self.browser = self.launch()
         self.search_url = self.search()
 
-        self.links = []
-        self.duplicates = []
+        self.listings = []
+        # self.duplicates = []
 
     def __del__(self):
         self.browser.close()
@@ -151,15 +152,15 @@ class GrailedNotify:
         self.browser.get(self.search_url)
         print "Done"
 
-    # Retrieves links for all listings
+    # Retrieves listings for all listings
     def scrape(self):
         time.sleep(self.WAIT_TIME)
         xpath = "//div//div//div//div//div//div//div//div//div//div//"
-        listings = self.browser.find_elements_by_xpath(xpath + "a[@href]")
-        num_listings = len(listings)
+        links = self.browser.find_elements_by_xpath(xpath + "a[@href]")
+        num_links = len(links)
 
-        for i in range(num_listings):
-            self.links.append(listings[i].get_attribute("href"))
+        for i in range(num_links):
+            self.listings.append(links[i].get_attribute("href"))
 
     # Notifies user with new link if not a duplicate
     def notify(self):
@@ -167,9 +168,9 @@ class GrailedNotify:
         content = ""
 
         # Create body of e-mail
-        for link in self.links:
-            if self.duplicate(link) != True:
-                content += link + "\n"
+        for listing in self.listings:
+            if self.duplicate(listing) != True:
+                content += listing + "\n"
 
         # Send the e-mail if it has content
         print "Sending listings to " + self.address + "...",
@@ -181,20 +182,47 @@ class GrailedNotify:
             print "ERROR: No new listings to send"
 
     # Check if the link is a duplicate
+    # def duplicate(self, link):
+    #     if self.duplicates.count(link) == 0:
+    #         return False
+    #     return True
+
+    # Check if the link is a duplicate
     def duplicate(self, link):
-        if self.duplicates.count(link) == 0:
-            return False
-        return True
+        duplicate_flag = False
+        db = sqlite3.connect("Listings.db")
+        c = db.cursor()
+        c.execute("SELECT link FROM listings WHERE link=?", (link,))
+        results = c.fetchall()
+
+        # If listings is not a duplicate, add it to the database
+        if not results:
+            # CHANGE 0 TO PRICE
+            self.insert_listing(link, 0)
+        else:
+            duplicate_flag = True
+
+        db.commit()
+        db.close()
+        return duplicate_flag
 
     # Populate the duplicates list for later use
-    def populate_duplicates(self):
-        for link in self.links:
-            if self.duplicate(link) != True:
-                self.duplicates.append(link)
+    # def populate_duplicates(self):
+    #     for link in self.listings:
+    #         if self.duplicate(link) != True:
+    #             self.duplicates.append(link)
 
-    # Frees up list of links
+    def insert_listing(self, link, price):
+        db = sqlite3.connect("Listings.db")
+        c = db.cursor()
+        c.execute("INSERT INTO listings VALUES (?, ?)", (link, price))
+        db.commit()
+        db.close()
+
+
+    # Frees up list of listings
     def del_links(self):
-        del self.links[:]
+        del self.listings[:]
 
     # Main loop
     def main(self):
@@ -203,6 +231,6 @@ class GrailedNotify:
             self.refresh()
             self.scrape()
             self.notify()
-            self.populate_duplicates()
+            # self.populate_duplicates()
             self.del_links()
             time.sleep(self.refresh_time)
